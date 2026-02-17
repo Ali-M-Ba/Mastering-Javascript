@@ -222,6 +222,24 @@ Tasks:
 
 const cart = new Map();
 
+cart.set("Laptop", 899);
+cart.set("Mouse", 49);
+cart.set("Keyboard", 99);
+cart.set("Screen Protector", 9);
+cart.set("Screen", 199);
+
+cart.delete("Screen Protector");
+
+console.log("Does the cart have a laptop:", cart.has("Laptop"));
+console.log("laptop in lower case won't work", cart.has("laptop"));
+
+let totalCart = 0;
+for (const [product, price] of cart) {
+  totalCart += price;
+}
+
+console.log(totalCart);
+
 /******************************************************************
  CHALLENGE 3 — Word Frequency Analyzer
 ******************************************************************/
@@ -241,6 +259,15 @@ Sentence:
 const sentence =
   "The quick brown fox jumps over the lazy fox and the quick dog";
 
+const wordsArray = sentence.split(" ");
+const wordsMap = new Map();
+
+for (const word of wordsArray) {
+  const lowerCasedWord = word.toLowerCase();
+  wordsMap.set(lowerCasedWord, (wordsMap.get(lowerCasedWord) || 0) + 1);
+}
+console.log(wordsMap);
+
 /******************************************************************
  CHALLENGE 4 — Object Keys in Maps (Important Advantage)
 ******************************************************************/
@@ -254,6 +281,25 @@ Tasks:
 - Value = last login date string
 - Retrieve login date for one object key
 */
+const usersMap = new Map();
+const user1 = {
+  name: "Ali",
+  id: 100,
+};
+const user2 = {
+  name: "Ahmed",
+  id: 200,
+};
+const user3 = {
+  name: "Mohammed",
+  id: 300,
+};
+
+usersMap.set(user1, "10-10-2026");
+usersMap.set(user2, "01-01-2026");
+usersMap.set(user3, "10-02-2026");
+
+console.log("User 1 last login date:", usersMap.get(user1));
 
 /******************************************************************
  CHALLENGE 5 — Inventory Stock Manager
@@ -271,6 +317,52 @@ Tasks:
 - Delete any item with stock = 0
 - Print remaining inventory
 */
+
+const inventory = new Map();
+
+inventory.set(101, { name: "Paper", stock: 10 });
+inventory.set(102, { name: "Clips", stock: 12 });
+inventory.set(103, { name: "Pens", stock: 20 });
+inventory.set(104, { name: "Markers", stock: 30 });
+inventory.set(105, { name: "Canvas", stock: 40 });
+
+// Cleaner, direct since it's a reference it mutates original
+console.log(
+  "Increase the clips stock by 100 using Map.get()",
+  (inventory.get(102).stock += 100),
+);
+
+// Complicated, expensive, two map lookups
+// console.log(
+//   "Increase the stock using Map.set()",
+//   inventory.set(102, {
+//     ...inventory.get(102),
+//     // ✔️ Pure Calculcation "="
+//     stock: inventory.get(102).stock + 100,
+// Don't spread and imutates in the same time
+//     // ❌ Mutate the original "+=" object while creating a new one
+//     // stock: (inventory.get(102).stock += 1111),
+//   }),
+// );
+
+console.log(
+  "Decrease the clips stock by 50 using Map.get()",
+  (inventory.get(102).stock -= 50),
+);
+
+console.log(
+  "Assaign zero to the pens' stock using Map.get()",
+  (inventory.get(103).stock = 0),
+);
+
+inventory.forEach((value, key) => {
+  if (value.stock === 0) inventory.delete(key);
+});
+
+console.log(
+  "The inventory after removing the product with zero stock:",
+  inventory,
+);
 
 /******************************************************************
  CHALLENGE 6 — Group Students by Grade
