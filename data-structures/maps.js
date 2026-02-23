@@ -388,6 +388,41 @@ const students = [
   { name: "Zaid", grade: "B" },
 ];
 
+const groupedByGrade = new Map();
+
+// students.forEach((student) => {
+//   const s = groupedByGrade.get(student.grade) || [];
+// ⚠ Spread operator causes unnecessary array allocation (only matters at scale)
+// [...s, student.name] CREATES A NEW ARRAY EVERY ITERATION
+// push() approach is more efficint add to the existing array
+//   groupedByGrade.set(student.grade, [...s, student.name]);
+// });
+
+// students.forEach(({ name, grade }) => {
+//   const arr = groupedByGrade.has(grade)
+//     ? groupedByGrade.get(grade)
+//     : groupedByGrade.set(grade, []).get(grade);
+//   arr.push(name);
+// });
+
+students.forEach(({ name, grade }) => {
+  const arr =
+    groupedByGrade.get(grade) ?? groupedByGrade.set(grade, []).get(grade);
+  arr.push(name);
+});
+console.log(groupedByGrade);
+
+// Using reduce() method
+// Without declaring any var during lopping
+// Shorter, cleaner
+// Must return the map in every iteration
+const groupedByGrade2 = students.reduce((map, { name, grade }) => {
+  if (!map.has(grade)) map.set(grade, []);
+  map.get(grade).push(name);
+  return map;
+}, new Map());
+
+console.log(groupedByGrade2);
 /******************************************************************
  CHALLENGE 7 — Cache System Simulation
 ******************************************************************/
@@ -405,6 +440,51 @@ Tasks:
 - If not → print "FETCHING..."
 - Update one cached value
 */
+
+const rizzes = [
+  [
+    "first-girl.cum",
+    { status: "success", data: { name: "Sara", age: "22", rizz: "failed" } },
+  ],
+  [
+    "sec-girl.cum",
+    { status: "success", data: { name: "Sara", age: "19", rizz: "success" } },
+  ],
+  [
+    "Third-girl.cum",
+    { status: "success", data: { name: "Sara", age: "20", rizz: "success" } },
+  ],
+  [
+    "first-girl.cum",
+    { status: "success", data: { name: "Sara", age: "22", rizz: "success" } },
+  ],
+];
+
+// rizz = res
+const cachedRizzes = new Map();
+
+rizzes.forEach(([url, rizz]) => {
+  if (!cachedRizzes.has(url)) {
+    console.log("FETCHING...");
+    console.log(url, rizz);
+    cachedRizzes.set(url, rizz);
+  } else {
+    console.log("FROM CHCHE");
+    // Retrive And Print The Cached Value
+    console.log(url, cachedRizzes.get(url));
+  }
+});
+
+// Update A Cached Rizz
+// 🚨 Keep in UR mind
+// Assign A New Object = New Reference
+cachedRizzes.set("first-girl.cum", {
+  status: "success",
+  data: { name: "Sara", age: "22", rizz: "success" },
+});
+
+// Print The New Updated Object
+console.log("first-girl.cum updated: ", cachedRizzes.get("first-girl.cum"));
 
 /******************************************************************
  CHALLENGE 8 — Most Frequent Item
@@ -424,6 +504,43 @@ Tasks:
 - Find the number with highest frequency
 */
 
+const numsMap = new Map();
+let highestFreq = nums[0];
+
+nums.forEach((num) => {
+  if (!numsMap.has(num)) {
+    numsMap.set(num, 1);
+  } else {
+    numsMap.set(num, numsMap.get(num) + 1);
+    if (numsMap.get(num) > numsMap.get(highestFreq)) highestFreq = num;
+  }
+});
+
+console.log(numsMap);
+console.log(
+  `The number ${highestFreq} has the most frequency ${numsMap.get(highestFreq)}`,
+);
+
+/////////////////////////////////////////
+
+const numsMap2 = new Map();
+
+let maxNum = null;
+let maxCount = 0;
+
+for (const n of nums) {
+  const count = (numsMap2.get(n) || 0) + 1;
+  numsMap2.set(n, count);
+
+  if (count > maxCount) {
+    maxCount = count;
+    maxNum = n;
+  }
+}
+
+console.log(numsMap2);
+console.log(`The number ${maxNum} has the most frequency ${maxCount}`);
+
 /******************************************************************
  CHALLENGE 9 — Map → Object Conversion
 ******************************************************************/
@@ -435,6 +552,8 @@ Tasks:
 - Convert Map into a plain object
 - Print the result
 */
+
+console.log(Object.fromEntries(numsMap));
 
 /******************************************************************
  CHALLENGE 10 — Object → Map Conversion
@@ -454,6 +573,12 @@ const config = {
   layout: "grid",
   sidebar: true,
 };
+console.log("config", config);
+
+const configMap = new Map(Object.entries(config));
+console.log("configMap", configMap);
+
+configMap.entries().forEach((entry) => console.log(entry));
 
 /******************************************************************
  BONUS CHALLENGE — Nested Maps
