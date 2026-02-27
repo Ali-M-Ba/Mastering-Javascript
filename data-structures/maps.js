@@ -596,4 +596,32 @@ Tasks:
 - Print all employees with salaries grouped by department
 */
 
+const departments = new Map();
+
+const itEmployees = new Map();
+itEmployees.set("Ali", 1000);
+itEmployees.set("Amal", 1000);
+itEmployees.set("Ahmed", 1000);
+
+departments.set("IT", itEmployees);
+
+const healthEmployees = new Map();
+healthEmployees.set("Jamal", 1000);
+healthEmployees.set("Fahad", 1000);
+healthEmployees.set("Khaled", 1000);
+
+departments.set("Health", healthEmployees);
+
+// console.log(departments);
+
+for (const [department, employees] of departments) {
+  console.log("Department: ", department);
+
+  for (const [name, salary] of employees) {
+    console.log(`name: ${name} => Salary: ${salary}`);
+  }
+
+  console.log("");
+}
+
 console.log("=== END OF CHALLENGES ===");
